@@ -1,140 +1,122 @@
-const baseUrl = "https://toonitalia.xyz/wp-json/";
-const searchBaseUrl = "https://toonitalia.xyz/wp-json/wp/v2/posts?search=%s"; // Search URL
-const streamType = "HLS"; // Streaming format
-const quality = "720p"; // Stream quality
+// Definizione del file JSON con la configurazione
+const config = {
+    "sourceName": "TOONITALIA",
+    "iconUrl": "xxx",
+    "author": {
+        "name": "DxC",
+        "icon": "xxx"
+    },
+    "version": "0.0.1",
+    "language": "Italian",
+    "streamType": "HLS",
+    "quality": "720p",
+    "baseUrl": "https://toonitalia.xyz/wp-json/",
+    "searchBaseUrl": "https://toonitalia.xyz/wp-json/wp/v2/posts?search=%s",
+    "scriptUrl": "xxx.js",
+    "asyncJS": true
+};
 
-// Function to search for anime based on a title query
-function searchResults(html) {
-    const results = [];
-    const jsonResponseRegex = /<script[^>]*id="json-response"[^>]*>(.*?)<\/script>/;
-    const jsonResponseMatch = html.match(jsonResponseRegex);
 
-    if (!jsonResponseMatch) {
-        console.log("No JSON data found in the HTML.");
-        return results;
-    }
+// Funzione per estrarre i dettagli del contenuto
+function extractContentDetails(postData) {
+    const contentDetails = {
+        title: postData.title.rendered || 'N/A',
+        originalTitle: (postData.content.rendered.match(/Titolo originale.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        alternativeTitles: (postData.content.rendered.match(/Titoli alternativi.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        country: (postData.content.rendered.match(/Paese di origine.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        publicationDate: (postData.content.rendered.match(/Data di pubblicazione.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        episodes: (postData.content.rendered.match(/N. Episodi.*?:\s*(\d+)/)?.[1]) || 'N/A',
+        status: (postData.content.rendered.match(/Stato Opera.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        streamingUpdate: (postData.content.rendered.match(/Aggiornamento episodi in streaming.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        plot: (postData.content.rendered.match(/Trama.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
+        sourceLink: (postData.content.rendered.match(/Fonte:.*?<a href="([^"]+)"/)?.[1]) || 'N/A'
+    };
 
-    const jsonData = JSON.parse(jsonResponseMatch[1]);
-
-    jsonData.forEach(post => {
-        if (!post || typeof post !== 'object') return;
-
-        const imageUrl = post.acf?.image_url || '';
-        const title = post.title.rendered || '';
-        const id = post.id || '';
-        const slug = post.slug || '';
-
-        if (id && slug) {
-            const href = `https://toonitalia.xyz/anime/${slug}-${id}`;
-
-            results.push({
-                title: title.trim(),
-                image: imageUrl,
-                href: href
-            });
-        }
-    });
-
-    return results;
+    return contentDetails;
 }
 
-// Function to extract anime details (description, aliases, airdate)
-function extractDetails(html) {
-    const details = [];
-    
-    const jsonResponseRegex = /<script[^>]*id="json-response"[^>]*>(.*?)<\/script>/;
-    const jsonResponseMatch = html.match(jsonResponseRegex);
+// Funzione per cercare i contenuti tramite l'API
+async function searchContent(query) {
+    const searchUrl = config.searchBaseUrl.replace("%s", encodeURIComponent(query));
 
-    if (!jsonResponseMatch) {
-        console.log("No JSON data found for details.");
-        return details;
-    }
-
-    const jsonData = JSON.parse(jsonResponseMatch[1]);
-    const animeData = jsonData[0]; // Assume the first post is the anime
-
-    const description = animeData.acf?.description || '';
-    const aliases = animeData.title.rendered || '';
-    const airdate = animeData.date || ''; // Assuming airdate is available in the 'date' field
-
-    if (description && aliases && airdate) {
-        details.push({
-            description: description,
-            aliases: aliases,
-            airdate: airdate
-        });
-    }
-
-    return details;
-}
-
-// Function to extract episodes data
-function extractEpisodes(html) {
-    const episodes = [];
-
-    const jsonResponseRegex = /<script[^>]*id="json-response"[^>]*>(.*?)<\/script>/;
-    const jsonResponseMatch = html.match(jsonResponseRegex);
-
-    if (!jsonResponseMatch) {
-        console.log("No JSON data found for episodes.");
-        return episodes;
-    }
-
-    const jsonData = JSON.parse(jsonResponseMatch[1]);
-    const animeData = jsonData[0]; // Assume the first post is the anime
-
-    const episodesData = animeData.acf?.episodes || [];
-
-    episodesData.forEach(episode => {
-        episodes.push({
-            href: `https://toonitalia.xyz/anime/${animeData.slug}-${animeData.id}/episode-${episode.id}`,
-            number: episode.number
-        });
-    });
-
-    return episodes;
-}
-
-// Function to extract the stream URL (HLS)
-async function extractStreamUrl(html) {
     try {
-        const videoPlayerRegex = /<video-player[^>]*url="([^"]*)"/;
-        const videoPlayerMatch = html.match(videoPlayerRegex);
+        const response = await fetch(searchUrl);
+        
+        // Verifica che la risposta sia in formato JSON
+        if (response.headers.get("content-type") && response.headers.get("content-type").includes("application/json")) {
+            const data = await response.json();
+            return data;
+        } else {
+            const text = await response.text();
+            console.log("Risposta non JSON:", text); // Stampa il contenuto della risposta
+            return [];
+        }
+    } catch (error) {
+        console.error("Errore durante la ricerca dei contenuti:", error);
+        return [];
+    }
+}
 
-        if (!videoPlayerMatch) {
-            console.log('No HLS stream URL found in the HTML.');
+// Funzione per ottenere i dettagli del contenuto
+async function getContentDetails(postId) {
+    const postUrl = `${config.baseUrl}wp/v2/posts/${postId}`;
+
+    try {
+        const response = await fetch(postUrl);
+        
+        // Verifica se la risposta è JSON
+        if (response.headers.get("content-type") && response.headers.get("content-type").includes("application/json")) {
+            const postData = await response.json();
+            return postData;
+        } else {
+            const text = await response.text();
+            console.log("Risposta non JSON (HTML o errore):", text); // Stampa il contenuto della risposta
             return null;
         }
-
-        const streamUrl = videoPlayerMatch[1];
-
-        // If stream type is HLS, ensure the correct format is used
-        if (streamType === "HLS" && streamUrl) {
-            console.log('HLS stream URL:', streamUrl);
-            return streamUrl;
-        }
-
-        console.log('No valid stream URL found.');
-        return null;
     } catch (error) {
-        console.log('Error extracting stream URL:', error);
+        console.error("Errore durante il recupero dei dettagli del contenuto:", error);
         return null;
     }
 }
 
-// Example: Function to search for an anime title
-async function searchAnime(query) {
-    const searchUrl = searchBaseUrl.replace('%s', encodeURIComponent(query));
-    const response = await fetch(searchUrl);
-    const data = await response.json();
+// Funzione per ottenere il flusso (streaming)
+async function getStreamUrl(postId) {
+    // In base alla configurazione, puoi estrarre il flusso in modo dinamico.
+    const postDetails = await getContentDetails(postId);
+    if (postDetails && postDetails.streamingUrl) {
+        return postDetails.streamingUrl;  // Assumiamo che `streamingUrl` sia presente nei dettagli.
+    }
 
-    const results = data.map(post => {
-        return {
-            title: post.title.rendered,
-            image: post.acf?.image_url,
-            href: `https://toonitalia.xyz/anime/${post.slug}-${post.id}`
-        };
-    });
-
-    return results;
+    return null;
 }
+
+// Funzione principale per eseguire l'applicazione
+async function main() {
+    const searchQuery = "nome della serie";  // Inserisci il nome della serie o del contenuto che stai cercando
+    const results = await searchContent(searchQuery);
+
+    if (results.length > 0) {
+        const firstResult = results[0];  // Supponiamo che il primo risultato sia quello che vogliamo
+        console.log("Risultato trovato:", firstResult);
+
+        // Ottenere i dettagli
+        const contentDetails = await getContentDetails(firstResult.id);
+        if (contentDetails) {
+            console.log("Dettagli del contenuto:", contentDetails);
+        } else {
+            console.log("Dettagli del contenuto non trovati.");
+        }
+
+        // Ottenere il link di streaming
+        const streamUrl = await getStreamUrl(firstResult.id);
+        if (streamUrl) {
+            console.log("URL di streaming:", streamUrl);
+        } else {
+            console.log("URL di streaming non disponibile.");
+        }
+    } else {
+        console.log("Nessun risultato trovato.");
+    }
+}
+
+main();
