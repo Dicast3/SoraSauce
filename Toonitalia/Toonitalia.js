@@ -1,22 +1,3 @@
-// Definizione del file JSON con la configurazione
-const config = {
-    "sourceName": "TOONITALIA",
-    "iconUrl": "xxx",
-    "author": {
-        "name": "DxC",
-        "icon": "xxx"
-    },
-    "version": "0.0.1",
-    "language": "Italian",
-    "streamType": "HLS",
-    "quality": "720p",
-    "baseUrl": "https://toonitalia.xyz/wp-json/",
-    "searchBaseUrl": "https://toonitalia.xyz/wp-json/wp/v2/posts?search=%s",
-    "scriptUrl": "xxx.js",
-    "asyncJS": true
-};
-
-
 // Funzione per estrarre i dettagli del contenuto
 function extractContentDetails(postData) {
     const contentDetails = {
