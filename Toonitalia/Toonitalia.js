@@ -1,103 +1,99 @@
-// Funzione per estrarre i dettagli del contenuto
-function extractContentDetails(postData) {
-    const contentDetails = {
-        title: postData.title.rendered || 'N/A',
-        originalTitle: (postData.content.rendered.match(/Titolo originale.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        alternativeTitles: (postData.content.rendered.match(/Titoli alternativi.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        country: (postData.content.rendered.match(/Paese di origine.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        publicationDate: (postData.content.rendered.match(/Data di pubblicazione.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        episodes: (postData.content.rendered.match(/N. Episodi.*?:\s*(\d+)/)?.[1]) || 'N/A',
-        status: (postData.content.rendered.match(/Stato Opera.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        streamingUpdate: (postData.content.rendered.match(/Aggiornamento episodi in streaming.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        plot: (postData.content.rendered.match(/Trama.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        sourceLink: (postData.content.rendered.match(/Fonte:.*?<a href="([^"]+)"/)?.[1]) || 'N/A'
-    };
+function searchResults(html) {
+    const results = [];
+    
+    // Supponiamo che i post siano contenuti in div con la classe '.post'
+    const postRegex = /<div class="post">(.*?)<\/div>/g;
+    let match;
 
-    return contentDetails;
-}
+    while (match = postRegex.exec(html)) {
+        const postHtml = match[1];
 
-// Funzione per cercare i contenuti tramite l'API
-async function searchContent(query) {
-    const searchUrl = config.searchBaseUrl.replace("%s", encodeURIComponent(query));
+        // Estrai il titolo (presumendo che ci sia un <h2 class="title">)
+        const titleMatch = postHtml.match(/<h2 class="title">(.*?)<\/h2>/);
+        const title = titleMatch ? titleMatch[1].trim() : '';
 
-    try {
-        const response = await fetch(searchUrl);
-        
-        // Verifica che la risposta sia in formato JSON
-        if (response.headers.get("content-type") && response.headers.get("content-type").includes("application/json")) {
-            const data = await response.json();
-            return data;
-        } else {
-            const text = await response.text();
-            console.log("Risposta non JSON:", text); // Stampa il contenuto della risposta
-            return [];
+        // Estrai il link (presumendo che ci sia un <a href="...">)
+        const hrefMatch = postHtml.match(/<a href="(.*?)"/);
+        const href = hrefMatch ? hrefMatch[1] : '';
+
+        if (title && href) {
+            results.push({
+                title: title,
+                href: href
+            });
         }
-    } catch (error) {
-        console.error("Errore durante la ricerca dei contenuti:", error);
-        return [];
     }
+
+    return results;
 }
+function extractDetails(html) {
+    const details = [];
 
-// Funzione per ottenere i dettagli del contenuto
-async function getContentDetails(postId) {
-    const postUrl = `${config.baseUrl}wp/v2/posts/${postId}`;
+    // Estrai la descrizione
+    const descriptionMatch = html.match(/<div class="description">(.*?)<\/div>/);
+    const description = descriptionMatch ? descriptionMatch[1].trim() : '';
 
+    // Estrai gli alias (se presenti, ad esempio con una classe .aliases)
+    const aliasesMatch = html.match(/<div class="aliases">(.*?)<\/div>/);
+    const aliases = aliasesMatch ? aliasesMatch[1].trim() : '';
+
+    // Estrai la data di uscita
+    const airdateMatch = html.match(/<div class="airdate">(.*?)<\/div>/);
+    const airdate = airdateMatch ? airdateMatch[1].trim() : '';
+
+    if (description && aliases && airdate) {
+        details.push({
+            description: description,
+            aliases: aliases,
+            airdate: airdate
+        });
+    }
+
+    return details;
+}
+function extractEpisodes(html) {
+    const episodes = [];
+
+    // Supponiamo che gli episodi siano in un elenco con la classe '.episodes'
+    const episodesRegex = /<li class="episode">(.*?)<\/li>/g;
+    let match;
+
+    while (match = episodesRegex.exec(html)) {
+        const episodeHtml = match[1];
+
+        // Estrai il numero dell'episodio (presumendo ci sia un <span class="episode-number">)
+        const numberMatch = episodeHtml.match(/<span class="episode-number">(.*?)<\/span>/);
+        const number = numberMatch ? numberMatch[1].trim() : '';
+
+        // Estrai il link dell'episodio (presumendo ci sia un <a href="...">)
+        const hrefMatch = episodeHtml.match(/<a href="(.*?)"/);
+        const href = hrefMatch ? hrefMatch[1] : '';
+
+        if (number && href) {
+            episodes.push({
+                number: number,
+                href: href
+            });
+        }
+    }
+
+    return episodes;
+}
+async function extractStreamUrl(html) {
     try {
-        const response = await fetch(postUrl);
-        
-        // Verifica se la risposta è JSON
-        if (response.headers.get("content-type") && response.headers.get("content-type").includes("application/json")) {
-            const postData = await response.json();
-            return postData;
-        } else {
-            const text = await response.text();
-            console.log("Risposta non JSON (HTML o errore):", text); // Stampa il contenuto della risposta
+        // Supponiamo che l'URL di streaming si trovi all'interno di un tag <script> o simile
+        const streamUrlMatch = html.match(/"stream_url":"(https:\/\/[^"]+)"/);
+
+        if (!streamUrlMatch) {
+            console.log('Nessun URL di streaming trovato.');
             return null;
         }
+
+        const streamUrl = streamUrlMatch[1];
+        console.log('URL di streaming:', streamUrl);
+        return streamUrl;
     } catch (error) {
-        console.error("Errore durante il recupero dei dettagli del contenuto:", error);
+        console.error('Errore durante il recupero dello stream URL:', error);
         return null;
     }
 }
-
-// Funzione per ottenere il flusso (streaming)
-async function getStreamUrl(postId) {
-    // In base alla configurazione, puoi estrarre il flusso in modo dinamico.
-    const postDetails = await getContentDetails(postId);
-    if (postDetails && postDetails.streamingUrl) {
-        return postDetails.streamingUrl;  // Assumiamo che `streamingUrl` sia presente nei dettagli.
-    }
-
-    return null;
-}
-
-// Funzione principale per eseguire l'applicazione
-async function main() {
-    const searchQuery = "nome della serie";  // Inserisci il nome della serie o del contenuto che stai cercando
-    const results = await searchContent(searchQuery);
-
-    if (results.length > 0) {
-        const firstResult = results[0];  // Supponiamo che il primo risultato sia quello che vogliamo
-        console.log("Risultato trovato:", firstResult);
-
-        // Ottenere i dettagli
-        const contentDetails = await getContentDetails(firstResult.id);
-        if (contentDetails) {
-            console.log("Dettagli del contenuto:", contentDetails);
-        } else {
-            console.log("Dettagli del contenuto non trovati.");
-        }
-
-        // Ottenere il link di streaming
-        const streamUrl = await getStreamUrl(firstResult.id);
-        if (streamUrl) {
-            console.log("URL di streaming:", streamUrl);
-        } else {
-            console.log("URL di streaming non disponibile.");
-        }
-    } else {
-        console.log("Nessun risultato trovato.");
-    }
-}
-
-main();
