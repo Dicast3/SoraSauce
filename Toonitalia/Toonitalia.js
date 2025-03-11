@@ -12,8 +12,6 @@ const config = {
     "quality": "720p",
     "baseUrl": "https://toonitalia.xyz/wp-json/",
     "searchBaseUrl": "https://toonitalia.xyz/wp-json/wp/v2/posts?search=%s",
-    "scriptUrl": "xxx.js",
-    "asyncJS": true
 };
 
 
