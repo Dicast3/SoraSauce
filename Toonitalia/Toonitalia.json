@@ -5,7 +5,7 @@
        "name": "DxC",
        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
    },
-   "version": "0.0.2",
+   "version": "0.0.b",
    "language": "Italian",
    "streamType": "HLS",
    "quality": "720p",
