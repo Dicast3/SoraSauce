@@ -15,23 +15,43 @@ const config = {
 };
 
 
-// Funzione per estrarre i dettagli del contenuto
+// Funzione per estrarre solo il titolo, l'immagine e il link del post
 function extractContentDetails(postData) {
     const contentDetails = {
-        title: postData.title.rendered || 'N/A',
-        originalTitle: (postData.content.rendered.match(/Titolo originale.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        alternativeTitles: (postData.content.rendered.match(/Titoli alternativi.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        country: (postData.content.rendered.match(/Paese di origine.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        publicationDate: (postData.content.rendered.match(/Data di pubblicazione.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        episodes: (postData.content.rendered.match(/N. Episodi.*?:\s*(\d+)/)?.[1]) || 'N/A',
-        status: (postData.content.rendered.match(/Stato Opera.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        streamingUpdate: (postData.content.rendered.match(/Aggiornamento episodi in streaming.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        plot: (postData.content.rendered.match(/Trama.*?:\s*([^<]+)<br/)?.[1]) || 'N/A',
-        sourceLink: (postData.content.rendered.match(/Fonte:.*?<a href="([^"]+)"/)?.[1]) || 'N/A'
+        title: postData.title.rendered || 'N/A', // Titolo dello show
+        image: extractImage(postData.content.rendered), // Link dell'immagine (la locandina)
+        link: postData.link || 'N/A' // Link del post
     };
 
     return contentDetails;
 }
+
+// Funzione per estrarre l'immagine (la locandina) dal contenuto HTML
+function extractImage(htmlContent) {
+    const imgRegex = /<img[^>]+src="([^"]+)"/; // Regex per trovare l'URL dell'immagine
+    const match = htmlContent.match(imgRegex);
+    return match ? match[1] : 'Immagine non trovata'; // Restituisce il link dell'immagine o un messaggio se non trovata
+}
+
+async function getAnimeData() {
+    const apiUrl = "https://toonitalia.xyz/wp-json/wp/v2/posts"; // URL dell'API
+
+    try {
+        const response = await fetch(apiUrl); // Chiediamo i dati all'API
+        const data = await response.json(); // Li convertiamo in formato JSON
+
+        // Estrarremo solo i dettagli di interesse (titolo, immagine e link)
+        const results = data.map(post => {
+            return extractContentDetails(post); // Restituiamo solo i dettagli necessari
+        });
+
+        console.log(results); // Mostriamo i risultati in console
+    } catch (error) {
+        console.error("Errore nel recuperare i dati:", error); // Gestione degli errori
+    }
+}
+
+getAnimeData(); // Chiamata alla funzione
 
 // Funzione per cercare i contenuti tramite l'API
 async function searchContent(query) {
