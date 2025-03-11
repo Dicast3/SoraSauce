@@ -1,7 +1,7 @@
 // Definizione del file JSON con la configurazione
 const config = {
-    "baseUrl": "https://toonitalia.xyz/wp-json/",
-    "searchBaseUrl": "https://toonitalia.xyz/wp-json/wp/v2/posts?search=%s",
+    "baseUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Toonitalia/api.json",
+    "searchBaseUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Toonitalia/api.json",
 };
 
 
