@@ -10,7 +10,7 @@
    "streamType": "HLS",
    "quality": "720p",
    "baseUrl": "https://toonitalia.xyz/wp-json/",
-   "searchBaseUrl": "https://toonitalia.xyz/wp-json/wp/v2/posts?search=%s",
+   "searchBaseUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Toonitalia/api.json",
    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Toonitalia/Toonitalia.js",
    "asyncJS": true
 }
