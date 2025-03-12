@@ -1,7 +1,7 @@
 ## Description
 my personal list of sources for Sora/Sulfur
 
-## Source dev status
+## Source development status
 
 | Source | Language | Status | Status description | External links |
 |-----------|-----------|-----------|-----------|-----------|
