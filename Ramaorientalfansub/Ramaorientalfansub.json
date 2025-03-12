@@ -1,16 +1,15 @@
 {
-   "sourceName": "Ramaorientalfansub",
-   "iconUrl": "xxx",
-   "author": {
-       "name": "DxC",
-       "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
-   },
-   "version": "0.0.z",
-   "language": "Italian",
-   "streamType": "HLS",
-   "quality": "720p",
-   "baseUrl": "https://ramaorientalfansub.tv/wp-json/",
-   "searchBaseUrl": "https://ramaorientalfansub.tv/wp-json/wp/v2/posts?search=%s",
-   "scriptUrl": "xxx",
-   "asyncJS": true
+    "sourceName": "Rama Oriental Fansub",
+    "iconUrl": "https://raw.githubusercontent.com/xibrox/sora-movie-module/refs/heads/main/ramaorientalfansub/icon.png",
+    "author": {
+        "name": "ibro",
+        "icon": "https://raw.githubusercontent.com/xibrox/sora-movie-module/refs/heads/main/profile.jpg"
+    },
+    "version": "1.0.0",
+    "language": "English",
+    "streamType": "MP4",
+    "quality": "1080p",
+    "baseUrl": "https://ramaorientalfansub.tv/",
+    "searchBaseUrl": "https://ramaorientalfansub.tv/search/?s_keyword=%s",
+    "scriptUrl": "https://raw.githubusercontent.com/xibrox/sora-movie-module/refs/heads/main/ramaorientalfansub/ramaorientalfansub.js"
 }
