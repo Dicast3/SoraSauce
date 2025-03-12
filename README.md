@@ -6,4 +6,4 @@ my personal list of sources for Sora/Sulfur
 | Source | Language | Status | External links |
 |-----------|-----------|-----------|-----------|
 | Toonitalia | 🇮🇹 | Work in progress  | //  |
-| Ramaorientalfansub | 🇮🇹 | Ourun - Done by another Dev  | [Link](https://github.com/xibrox/sora-movie-module/tree/main/ramaorientalfansub)  |
+| Ramaorientalfansub | 🇮🇹 | Outrun - Done by another Dev  | [Link](https://github.com/xibrox/sora-movie-module/tree/main/ramaorientalfansub)  |
