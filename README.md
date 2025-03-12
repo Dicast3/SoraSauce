@@ -3,7 +3,7 @@ My personal list of sources for Sora/Sulfur
 
 Here are sources made by me and other developers.
 They were copied and pasted to archive them as study templates.
-These external sources do not work, they need to be modified to do so, so I included the link that goes back to the original author's page.
+These external sources - ON THIS SPECIFIC REPO - do not work, they need to be modified to do so, so I included the link that goes back to the original author's page.
 
 ## Source development status
 
