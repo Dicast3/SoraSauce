@@ -1,7 +1,9 @@
 # SoraSauce
+
+## Description
 my personal list of sources for Sora/Sulfur
 
-Source dev status
+## Source dev status
 
 | Source | Status | External links |
 |-----------|-----------|-----------|
