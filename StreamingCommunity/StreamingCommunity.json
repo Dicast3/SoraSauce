@@ -5,8 +5,8 @@
        "name": "DxC",
        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
    },
-   "version": "beta",
-   "language": "0.0.1",
+   "version": "0.0.1",
+   "language": "",
    "streamType": "HLS",
    "quality": "480p", "720p", "1080p",
    "baseUrl": "https://streamingcommunity.hiphop/",
