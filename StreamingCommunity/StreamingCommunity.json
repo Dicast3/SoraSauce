@@ -11,6 +11,6 @@
    "quality": "720p",
    "baseUrl": "xxx",
    "searchBaseUrl": "xxx",
-   "scriptUrl": "xxx",
+   "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/StreamingCommunity/StreamingCommunity.js",
    "asyncJS": true
 }
