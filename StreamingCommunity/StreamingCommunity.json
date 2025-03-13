@@ -6,7 +6,7 @@
        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
    },
    "version": "beta",
-   "language": "Italian",
+   "language": "0.0.1",
    "streamType": "HLS",
    "quality": "480p", "720p", "1080p",
    "baseUrl": "https://streamingcommunity.hiphop/",
