@@ -5,12 +5,12 @@
        "name": "DxC",
        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
    },
-   "version": "0.0.b",
+   "version": "beta",
    "language": "Italian",
    "streamType": "HLS",
    "quality": "480p", "720p", "1080p",
    "baseUrl": "https://streamingcommunity.hiphop/",
-   "searchBaseUrl": "xxx",
+   "searchBaseUrl": "https://streamingcommunity.hiphop/search?q=",
    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/StreamingCommunity/StreamingCommunity.js",
    "asyncJS": true
 }
