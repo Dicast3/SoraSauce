@@ -8,7 +8,7 @@
    "version": "0.0.b",
    "language": "Italian",
    "streamType": "HLS",
-   "quality": "720p",
+   "quality": "480p", "720p", "1080p",
    "baseUrl": "xxx",
    "searchBaseUrl": "xxx",
    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/StreamingCommunity/StreamingCommunity.js",
