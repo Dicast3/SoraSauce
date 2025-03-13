@@ -9,7 +9,7 @@
    "language": "Italian",
    "streamType": "HLS",
    "quality": "480p", "720p", "1080p",
-   "baseUrl": "xxx",
+   "baseUrl": "https://streamingcommunity.hiphop/",
    "searchBaseUrl": "xxx",
    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/StreamingCommunity/StreamingCommunity.js",
    "asyncJS": true
