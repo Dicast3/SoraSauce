@@ -1,0 +1,16 @@
+{
+   "sourceName": "Ovovideo",
+   "iconUrl": "xxx",
+   "author": {
+       "name": "DxC",
+       "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
+   },
+   "version": "0.0.b",
+   "language": "Italian",
+   "streamType": "HLS",
+   "quality": "720p",
+   "baseUrl": "xxx",
+   "searchBaseUrl": "xxx",
+   "scriptUrl": "xxx",
+   "asyncJS": true
+}
