@@ -1,76 +1,39 @@
 async function searchResults(keyword) {
-  const response = await fetchv2(`https://altadefinizione.gent/?s=${encodeURIComponent(keyword)}`);
-  const html = await response.text();
-
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const items = doc.querySelectorAll('.item');
-
-  const results = Array.from(items).map(item => {
-    const titleElement = item.querySelector('.title');
-    const imageElement = item.querySelector('img');
-    const linkElement = item.querySelector('a');
-
-    return {
-      title: titleElement ? titleElement.textContent.trim() : null,
-      image: imageElement ? imageElement.src : null,
-      href: linkElement ? linkElement.href : null,
-    };
-  });
+  // Simulazione: ritorna una lista "fake" con un solo risultato
+  const results = [
+    {
+      title: "My Hero Academia: You're Next",
+      image: "https://dummyimage.com/300x450/000/fff&text=MHA",
+      href: "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Altadefinizione/Altadefinizione.json",
+    },
+  ];
 
   return JSON.stringify(results);
 }
 
 async function extractDetails(url) {
-  const response = await fetchv2(url);
-  const html = await response.text();
-
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  const descriptionElement = doc.querySelector('.description');
-  const airdateElement = doc.querySelector('.airdate');
-
+  // Simulazione: ritorna i dettagli fake
   return JSON.stringify([
     {
-      description: descriptionElement ? descriptionElement.textContent.trim() : 'N/A',
-      aliases: 'N/A',
-      airdate: airdateElement ? airdateElement.textContent.trim() : 'N/A',
+      description:
+        "In una società in cui eroi e cattivi si scontrano continuamente in nome della pace e del caos, Deku, uno studente della U.A. High School che aspira a diventare il miglior eroe possibile, affronta il ...  Leggi tutto",
+      aliases: "N/A",
+      airdate: "N/A",
     },
   ]);
 }
 
 function extractEpisodes(html) {
-  const episodes = [];
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  const episodeElements = doc.querySelectorAll('.episode');
-
-  episodeElements.forEach((episodeElement, index) => {
-    const linkElement = episodeElement.querySelector('a');
-    if (linkElement) {
-      episodes.push({
-        href: linkElement.href,
-        number: index + 1,
-      });
-    }
-  });
-
-  return episodes;
+  // Simulazione: ritorna una lista con un solo episodio fasullo
+  return [
+    {
+      href: "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Altadefinizione/Altadefinizione.json",
+      number: 1,
+    },
+  ];
 }
 
 async function extractStreamUrl(url) {
-  const response = await fetchv2(url);
-  const html = await response.text();
-
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-
-  const iframeElement = doc.querySelector('iframe');
-  if (iframeElement && iframeElement.src) {
-    return iframeElement.src;
-  }
-
-  return null;
+  // Simulazione: ritorna un link blob finto
+  return "blob:https://supervideo.cc/9595a9e5-2099-4fa3-b860-8bfafbc6d6cd";
 }
