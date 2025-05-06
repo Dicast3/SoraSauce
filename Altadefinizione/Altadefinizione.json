@@ -1,9 +1,9 @@
 {
     "sourceName": "Altadefinizione",
-    "iconUrl": "https://raw.githubusercontent.com/xibrox/sora-movie-module/refs/heads/main/ramaorientalfansub/icon.png",
+    "iconUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Altadefinizione/Logo.png",
     "author": {
         "name": "DxC",
-        "icon": "XXX"
+        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/author.png"
     },
     "version": "0.0.a",
     "language": "Italian",
@@ -11,5 +11,5 @@
     "quality": "1080p",
     "baseUrl": "https://altadefinizione.gent/",
     "searchBaseUrl": "https://altadefinizione.gent/",
-    "scriptUrl": "xxx"
+    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Altadefinizione/Altadefinizione.js"
 }
