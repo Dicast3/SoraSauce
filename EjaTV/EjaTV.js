@@ -32,10 +32,6 @@ function extractDetails(html) {
     }];
 }
 
-function extractEpisodes(html) {
-    return []; // Non applicabile per canali TV live
-}
-
 function extractStreamUrl(html) {
     const streamRegex = /<iframe[^>]+src="([^"]+\.m3u8[^"]*)"/;
     const match = html.match(streamRegex);
@@ -51,4 +47,18 @@ function extractStreamUrl(html) {
     }
 
     return null;
+}
+
+function extractEpisodes(html) {
+    const episodes = [];
+    const streamUrl = extractStreamUrl(html);
+
+    if (streamUrl) {
+        episodes.push({
+            href: streamUrl,
+            number: "Live"
+        });
+    }
+
+    return episodes;
 }
