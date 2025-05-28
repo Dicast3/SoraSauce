@@ -1,0 +1,18 @@
+{
+    "sourceName": "CasaCinema",
+    "iconUrl": "https://casacinema.world/favicon.ico",
+    "author": {
+        "name": "DxC",
+        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Author.PNG"
+    },
+    "version": "1.0.0",
+    "language": "Italian",
+    "streamType": "HLS",
+    "quality": "Auto",
+    "baseUrl": "https://casacinema.world/",
+    "searchBaseUrl": "https://casacinema.world/?s=%s",
+    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/CasaCinema/CasaCinema.js",
+    "type": "movie",
+    "asyncJS": true,
+    "softsub": false
+}
