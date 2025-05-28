@@ -11,7 +11,7 @@
     "quality": "Auto",
     "baseUrl": "https://eja.tv/",
     "searchBaseUrl": "https://eja.tv/?search=%s",
-    "scriptUrl": "xxx",
+    "scriptUrl": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/EjaTV/EjaTV.js",
     "type": "live",
     "asyncJS": true,
     "softsub": false
