@@ -3,7 +3,7 @@
     "iconUrl": "https://eja.tv/img/eja_64.png",
     "author": {
         "name": "DxC",
-        "icon": "xxx"
+        "icon": "https://raw.githubusercontent.com/Dicast3/SoraSauce/refs/heads/main/Author.PNG"
     },
     "version": "1.0.0",
     "language": "Multilingual",
